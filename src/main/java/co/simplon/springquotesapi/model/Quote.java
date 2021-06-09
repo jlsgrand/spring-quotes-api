@@ -1,14 +1,27 @@
 package co.simplon.springquotesapi.model;
 
-public class Quote {
-    private int id;
-    private String content;
-    private int characterIdx;
+import javax.persistence.*;
 
-    public Quote(int id, String content, int characterIdx) {
+@Entity
+public class Quote {
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "quote_id_seq")
+    @SequenceGenerator(name = "quote_id_seq", allocationSize = 1)
+    private int id;
+
+    @Column(name = "content_quote", length = 1000)
+    private String content;
+
+    @ManyToOne
+    private Character character;
+
+    public Quote(int id, String content, Character character) {
         this.id = id;
         this.content = content;
-        this.characterIdx = characterIdx;
+        this.character = character;
+    }
+
+    public Quote() {
     }
 
     public int getId() {
@@ -19,8 +32,8 @@ public class Quote {
         return content;
     }
 
-    public int getCharacterIdx() {
-        return characterIdx;
+    public Character getCharacter() {
+        return character;
     }
 
     @Override
@@ -28,7 +41,6 @@ public class Quote {
         return "Quote {" +
                 "id=" + id +
                 ", content='" + content + '\'' +
-                ", characterIdx=" + characterIdx +
                 '}';
     }
 }
